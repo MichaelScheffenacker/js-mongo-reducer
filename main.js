@@ -1,11 +1,12 @@
-const Struct = eigenString => (...args) => ({ [eigenString]: [...args] });
+const SingleStruct = eigenString => x => ({ [eigenString]: x });
+const MultiStruct = eigenString => (...args) => ({ [eigenString]: [...args] });
 const Reducer = (seq, eigenVal) =>
     seq.reverse().reduce((res, f) => f(res), eigenVal);
 const StructReducer = (seq, eigenString) =>
-    (...args) => Reducer(seq, Struct(eigenString)(...args));
+    (...args) => Reducer(seq, MultiStruct(eigenString)(...args));
 const Pusher = (gen, seq, eigenString) =>
     () => {
-        seq.push(x => Struct(eigenString)(x));
+        seq.push(x => SingleStruct(eigenString)(x));
         return gen;
     }
 const gen = () => {
