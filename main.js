@@ -21,10 +21,8 @@ const makeGen = () => {
     return gen
 };
 
-g = makeGen();
-
 console.log(
     JSON.stringify(
-        g.size().setIntersection(['a', 'b', 'c'], ['a', 'd'])
+        makeGen().size().setIntersection(['a', 'b', 'c'], ['a', 'd'])
     )
 )
