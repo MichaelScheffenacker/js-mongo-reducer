@@ -14,11 +14,12 @@ const gen = () => {
     gen.result = x => Reducer(seq, x);
     gen.setIntersection = StructReducer(seq,'$setIntersection');
     gen.size = Pusher(gen, seq, '$size');
+    gen.$toString = Pusher(gen, seq, '$toString');
     return gen;
 };
 
 console.log(
     JSON.stringify(
-        gen().size().setIntersection(['a', 'b', 'c'], ['a', 'd'])
+        gen().$toString().size().setIntersection(['a', 'b', 'c'], ['a', 'd'])
     )
 )
