@@ -1,3 +1,7 @@
+const Reducer = (seq, eigen) =>
+    (...args) => seq.reverse().reduce(
+        (res, f) => f(res), ({ [eigen]: [...args] })
+    );
 const makeGen = () => {
     const gen = { sequence: [] };
     gen.result = x => {
@@ -6,7 +10,7 @@ const makeGen = () => {
         return  result;
     };
     gen.setIntersection = (x, y) => {
-        const result = gen.sequence.reverse().reduce( (res, f) => f(res), ({ $setIntersection: [x, y] }));
+        const result = Reducer(gen.sequence, '$setIntersection')(x, y);
         gen.sequence = [];
         return  result;
     };
