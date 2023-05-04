@@ -1,20 +1,24 @@
-const Reducer = (seq, eigen) =>
-    (...args) => seq.reverse().reduce(
-        (res, f) => f(res), ({ [eigen]: [...args] })
-    );
-const makeGen = () => {
+const Struct = eigenVal => (...args) => ({ [eigenVal]: [...args] });
+const Reducer = (seq, eigenVal) => seq.reverse().reduce(
+    (res, f) => f(res),
+    eigenVal
+);
+const gen = () => {
     const gen = { sequence: [] };
     gen.result = x => gen.sequence.reverse().reduce( (res, f) => f(res), x);
-    gen.setIntersection = (x, y) => Reducer(gen.sequence, '$setIntersection')(x, y);
+    gen.setIntersection = (x, y) => Reducer(
+        gen.sequence,
+        Struct('$setIntersection')(x, y)
+    );
     gen.size = () => {
         gen.sequence.push( x => ({ $size: x }) );
-        return gen
+        return gen;
     };
-    return gen
+    return gen;
 };
 
 console.log(
     JSON.stringify(
-        makeGen().size().setIntersection(['a', 'b', 'c'], ['a', 'd'])
+        gen().size().setIntersection(['a', 'b', 'c'], ['a', 'd'])
     )
 )
