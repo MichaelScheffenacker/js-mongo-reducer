@@ -3,15 +3,17 @@ const Reducer = (seq, eigenVal) =>
     seq.reverse().reduce((res, f) => f(res), eigenVal);
 const StructReducer = (seq, eigenString) =>
     (...args) => Reducer(seq, Struct(eigenString)(...args));
+const Pusher = (gen, seq, eigenString) =>
+    () => {
+        seq.push(x => Struct(eigenString)(x));
+        return gen;
+    }
 const gen = () => {
     const gen = { sequence: [] };
     const seq = gen.sequence;
     gen.result = x => Reducer(seq, x);
     gen.setIntersection = StructReducer(seq,'$setIntersection');
-    gen.size = () => {
-        seq.push( x => ({ $size: x }) );
-        return gen;
-    };
+    gen.size = Pusher(gen, seq, '$size');
     return gen;
 };
 
