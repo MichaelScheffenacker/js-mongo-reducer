@@ -4,16 +4,8 @@ const Reducer = (seq, eigen) =>
     );
 const makeGen = () => {
     const gen = { sequence: [] };
-    gen.result = x => {
-        const result = gen.sequence.reverse().reduce( (res, f) => f(res), x);
-        gen.sequence = [];
-        return  result;
-    };
-    gen.setIntersection = (x, y) => {
-        const result = Reducer(gen.sequence, '$setIntersection')(x, y);
-        gen.sequence = [];
-        return  result;
-    };
+    gen.result = x => gen.sequence.reverse().reduce( (res, f) => f(res), x);
+    gen.setIntersection = (x, y) => Reducer(gen.sequence, '$setIntersection')(x, y);
     gen.size = () => {
         gen.sequence.push( x => ({ $size: x }) );
         return gen
