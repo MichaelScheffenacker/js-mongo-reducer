@@ -1,17 +1,15 @@
-const Struct = eigenVal => (...args) => ({ [eigenVal]: [...args] });
-const Reducer = (seq, eigenVal) => seq.reverse().reduce(
-    (res, f) => f(res),
-    eigenVal
-);
+const Struct = eigenString => (...args) => ({ [eigenString]: [...args] });
+const Reducer = (seq, eigenVal) =>
+    seq.reverse().reduce((res, f) => f(res), eigenVal);
+const StructReducer = (seq, eigenString) =>
+    (...args) => Reducer(seq, Struct(eigenString)(...args));
 const gen = () => {
     const gen = { sequence: [] };
-    gen.result = x => gen.sequence.reverse().reduce( (res, f) => f(res), x);
-    gen.setIntersection = (x, y) => Reducer(
-        gen.sequence,
-        Struct('$setIntersection')(x, y)
-    );
+    const seq = gen.sequence;
+    gen.result = x => Reducer(seq, x);
+    gen.setIntersection = StructReducer(seq,'$setIntersection');
     gen.size = () => {
-        gen.sequence.push( x => ({ $size: x }) );
+        seq.push( x => ({ $size: x }) );
         return gen;
     };
     return gen;
