@@ -15,11 +15,11 @@ const gen = () => {
 
     gen.result = x => Reducer(seq, x);
     gen.$concat = StructReducer(seq, '$concat');
-    gen.setIntersection = StructReducer(seq,'$setIntersection');
+    gen.$setIntersection = StructReducer(seq,'$setIntersection');
 
     gen.$addFields = Pusher(gen, seq, '$addFields');
     gen.score = Pusher(gen, seq, 'score');
-    gen.size = Pusher(gen, seq, '$size');
+    gen.$size = Pusher(gen, seq, '$size');
     gen.$toString = Pusher(gen, seq, '$toString');
 
     return gen;
@@ -28,7 +28,7 @@ const gen = () => {
 console.log(
     JSON.stringify(
         gen().$addFields().score().$concat(
-            gen().$toString().size().setIntersection(['a', 'b', 'c'], ['a', 'd']),
+            gen().$toString().$size().$setIntersection(['a', 'b', 'c'], ['a', 'd']),
             gen().$toString().result('$createdAt')
         )
     )
